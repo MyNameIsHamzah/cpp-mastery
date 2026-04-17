@@ -12,3 +12,4 @@ include_directories(ch16_vectors)
 # Build the Executables (Target Name -> Files needed)
 # ---------------------------------------------------------
 add_executable(ch16_q3-4  ch16_vectors/quiz_q3-4_minmax.cpp)
+add_executable(ch16_q5  ch16_vectors/quiz_q5_hangman.cpp)
