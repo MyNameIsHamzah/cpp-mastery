@@ -12,6 +12,7 @@ private:
     int m_pluses{6};
     std::vector<char> m_obfuscated_word{};
     std::vector<char> m_guessed_letters{};
+    std::vector<char> m_incorrect_letters{};
 
 public:
     Session() : m_word{WordList::getRandomWord()} {};
@@ -27,18 +28,17 @@ public:
 
     void displayObfuscatedWord()
     {
-        std::cout << "The word is: ";
+        std::cout << "\nThe word is: ";
         for (const auto &x : m_obfuscated_word)
         {
             std::cout << x << " ";
         }
         displayLives();
-        std::cout << "\n";
     }
 
     void displayLives()
     { // refactor to have a vector of plusses then push back the wrong char to it
-        std::cout << "\t Lives left " << m_pluses;
+        std::cout << "\t Lives left " << m_pluses << "\n";
     }
 
     char enterGuess()
@@ -79,18 +79,34 @@ public:
                 m_obfuscated_word[i] = x;
                 m_guessed_letters.push_back(x);
                 found = true;
+                std::cout << "Yes, " << "'" << x << "'" << "is in the word!\n";
             }
         }
         if (found)
             return;
 
+        std::cout << "No " << "'" << x << "'" << "is not in the word!\n";
         m_pluses--;
         return;
     }
 
+    bool hasWon(std::vector<char>& v){
+        if (v.size() == m_guessed_letters.size()){
+        bool noUnderscore{true};
+        for (std::size_t i{0}; i < v.size(); i++){
+            if (m_obfuscated_word[i] == '_'){
+                noUnderscore = false;
+            }
+        }
+        if (noUnderscore){
+            return true;
+        }
+        }   
+        return false;
+    }
+
     bool hasLetterBeenGuessed(char x)
     {
-
         for (char i : m_guessed_letters)
         {
             if (i == x)
@@ -121,7 +137,15 @@ public:
             displayObfuscatedWord();
             char guess{enterGuess()};
             checkLetter(guess, wordAsVector);
+            if(hasWon(wordAsVector)){
+                std::cout << "You won! the word was " << m_word << "\n";
+                break;
+            }
         } while (m_pluses > 0);
+
+        if (m_pluses == 0){
+        std::cout << "You lost! The word was: " << m_word;
+        }
     }
 };
 
