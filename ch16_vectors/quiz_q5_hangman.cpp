@@ -79,22 +79,14 @@ class Session {
         return;
     }
 
-    bool hasWon() {
-        auto it{std::find(m_obfuscated_word.begin(), m_obfuscated_word.end(), '_')};
-        if (it != m_obfuscated_word.end()) {
-            return false;
-        }
-        return true;
+    template <typename T, typename U>
+    bool contains(const T& container, const U& value) const {
+        return std::find(container.begin(), container.end(), value) != container.end();
     }
 
-    bool hasLetterBeenGuessed(char x, const std::vector<char>& v) {
-        for (char i : v) {
-            if (i == x) {
-                return true;
-            }
-        }
-        return false;
-    }
+    bool hasWon() { return !contains(m_obfuscated_word, '_'); }
+
+    bool hasLetterBeenGuessed(char x, const std::vector<char>& v) { return contains(v, x); }
 
     void clearErroneousInput() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
