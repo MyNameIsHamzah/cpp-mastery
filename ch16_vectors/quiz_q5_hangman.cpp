@@ -96,7 +96,7 @@ class Session {
     Session() : m_word{WordList::getRandomWord()}, m_obfuscated_word(m_word.length(), '_') {};
 
     void startGame() {
-        std::cout << "Welcone to C++man (a variant of Hangman)\n";
+        std::cout << "Welcome to C++man (a variant of Hangman)\n";
         std::cout << "To win: guess the word. To lose: run out of pluses.\n\n";
         do {
             displayObfuscatedWord();
