@@ -10,22 +10,14 @@ class Session
 {
 private:
     std::string_view m_word{};
+    std::vector<char> m_wordAsVector = std::vector<char>(m_word.begin(), m_word.end());
     std::size_t m_pluses{6};
-    std::vector<char> m_obfuscated_word{};
+    std::vector<char> m_obfuscated_word = std::vector<char>(m_word.length(), '_');
     std::vector<char> m_guessed_letters{};
     std::vector<char> m_incorrect_letters{};
 
 public:
     Session() : m_word{WordList::getRandomWord()} {};
-
-    void createObfuscatedWord()
-    {
-        for (std::size_t i{0}; i < m_word.length(); i++)
-        {
-            m_obfuscated_word.push_back('_');
-        }
-        assert(m_obfuscated_word.size() == m_word.length());
-    }
 
     void displayObfuscatedWord()
     {
@@ -68,9 +60,7 @@ public:
                 std::cout << "That wasn't a valid input. Try again.\n";
                 continue;
             }
-
             clearErroneousInput();
-
             return x;
         }
     }
@@ -97,22 +87,14 @@ public:
             std::cout << "Yes, " << "'" << x << "'" << " is in the word!\n";
             return;
         }
-
         m_pluses--;
-        handleIncorrectGuess(x);
-
-        std::cout << "No " << "'" << x << "'" << " is not in the word!\n";
-
-        return;
-    }
-
-    void handleIncorrectGuess(char x)
-    {
         m_incorrect_letters.push_back(x);
         if (m_incorrect_letters.size() > 1)
         {
             std::sort(m_incorrect_letters.begin(), m_incorrect_letters.end());
         }
+        std::cout << "No " << "'" << x << "'" << " is not in the word!\n";
+        return;
     }
 
     bool hasWon(std::vector<char> &v)
@@ -156,23 +138,17 @@ public:
     {
         std::cout << "Welcone to C++man (a variant of Hangman)\n";
         std::cout << "To win: guess the word. To lose: run out of pluses.\n\n";
-
-        std::vector<char> wordAsVector(m_word.begin(), m_word.end());
-        createObfuscatedWord();
-
         do
         {
             displayObfuscatedWord();
             displayLives();
-            char guess{enterGuess()};
-            checkLetter(guess, wordAsVector);
-            if (hasWon(wordAsVector))
+            checkLetter(enterGuess(), m_wordAsVector);
+            if (hasWon(m_wordAsVector))
             {
                 std::cout << "\nYou won! The word was: " << m_word << "\n";
                 break;
             }
         } while (m_pluses > 0);
-
         if (m_pluses == 0)
         {
             displayObfuscatedWord();
