@@ -54,19 +54,18 @@ class Session {
 
     void checkLetter(char x) {
         bool found{false};
-        if (hasLetterBeenGuessed(x, m_guessed_letters) ||
-            hasLetterBeenGuessed(x, m_incorrect_letters)) {
+        if (contains(m_guessed_letters, x) || contains(m_incorrect_letters, x)) {
             std::cout << "You already guessed that. Try again.\n";
             return;
         }
         for (std::size_t i{0}; i < m_word.size(); i++) {
             if (m_word[i] == x) {
                 m_obfuscated_word[i] = x;
-                m_guessed_letters.push_back(x);
                 found = true;
             }
         }
         if (found) {
+            m_guessed_letters.push_back(x);
             std::cout << "Yes, " << "'" << x << "'" << " is in the word!\n";
             return;
         }
