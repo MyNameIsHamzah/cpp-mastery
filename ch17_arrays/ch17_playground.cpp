@@ -1,23 +1,38 @@
 #include <array>
 #include <iostream>
+#include <string_view>
 
-template <typename T, std::size_t N>
-void printArray(const std::array<T, N>& arr) {
-    std::cout << "The array (";
-    auto delimiter{""};
-    for (const auto& i : arr) {
-        std::cout << delimiter << i;
-        delimiter = ", ";
-    }
-    std::cout << ") has length " << N << "\n";
+namespace Animal {
+enum Animal { dog, cat, elephant, duck, snake, maxAnimals };
+
+struct Data {
+    std::string_view animalName{};
+    int numOfLegs{};
+    std::string_view sound{};
+};
+using namespace std::string_view_literals;
+constexpr std::array animalName{
+    "dog"sv, "cat"sv, "elephant"sv, "duck"sv, "snake"sv,
+};
+
+[[maybe_unused]] constexpr std::array<Data, Animal::maxAnimals> animals{{{"dog", 4, "woof"},
+                                                                         {"cat", 4, "meow"},
+                                                                         {"elephant", 4, "pawoo"},
+                                                                         {"duck", 2, "quack"},
+                                                                         {"snake", 0, "hissss"}}};
+
+}  // namespace Animal
+
+constexpr std::string_view getName(Animal::Animal name) {
+    return Animal::animalName[name];
+}
+
+void enterAnimal() {
+    std::cout << "Enter an animal: ";
+    std::string x;
+    std::cin >> x;
 }
 
 int main() {
-    constexpr std::array arr1{1, 4, 9, 16};
-    printArray(arr1);
-
-    constexpr std::array arr2{'h', 'e', 'l', 'l', 'o'};
-    printArray(arr2);
-
     return 0;
 }
