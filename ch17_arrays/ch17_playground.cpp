@@ -6,29 +6,26 @@
 #include <string_view>
 
 namespace Animal {
-enum Animal { chicken, dog, cat, elephant, duck, snake, maxAnimals };
+enum Type { chicken, dog, cat, elephant, duck, snake, maxAnimals };
 
 struct Data {
     std::string_view animalName{};
     int numOfLegs{};
     std::string_view sound{};
 };
-using namespace std::string_view_literals;
-constexpr std::array animalName{
-    "chicken"sv, "dog"sv, "cat"sv, "elephant"sv, "duck"sv, "snake"sv,
-};
 
-[[maybe_unused]] constexpr std::array<Data, Animal::maxAnimals> animals{{{"chicken", 2, "cluck"},
-                                                                         {"dog", 4, "woof"},
-                                                                         {"cat", 4, "meow"},
-                                                                         {"elephant", 4, "pawoo"},
-                                                                         {"duck", 2, "quack"},
-                                                                         {"snake", 0, "hissss"}}};
+[[maybe_unused]] constexpr std::array<Data, Animal::maxAnimals> animalCollection{
+    {{"chicken", 2, "cluck"},
+     {"dog", 4, "woof"},
+     {"cat", 4, "meow"},
+     {"elephant", 4, "pawoo"},
+     {"duck", 2, "quack"},
+     {"snake", 0, "hissss"}}};
 
 }  // namespace Animal
 
-const Animal::Data& getAnimal(std::size_t name) {
-    return Animal::animals[name];
+const Animal::Data& getAnimal(Animal::Type type) {
+    return Animal::animalCollection[type];
 }
 
 std::string enterAnimal() {
@@ -38,11 +35,11 @@ std::string enterAnimal() {
     return x;
 }
 
-std::optional<std::size_t> findAnimal(std::string_view userInput) {
-    auto it = std::find(Animal::animalName.begin(), Animal::animalName.end(), userInput);
-    if (it != Animal::animalName.end()) {
-        auto index{std::distance(Animal::animalName.begin(), it)};
-        return index;
+std::optional<Animal::Type> findAnimal(std::string_view userInput) {
+    for (std::size_t i{0}; i < Animal::animalCollection.size(); ++i) {
+        if (userInput == Animal::animalCollection[i].animalName) {
+            return static_cast<Animal::Type>(i);
+        }
     }
     return std::nullopt;
 }
@@ -52,11 +49,11 @@ void displayAnimal(const Animal::Data& animal) {
               << animal.sound << ".\n";
 }
 
-void displayOtherAnimals(std::size_t value = Animal::animalName.size() + 99) {
+void displayOtherAnimals(Animal::Type x = Animal::Type::maxAnimals) {
     std::cout << "\nHere is the data for the rest of the animals:\n";
-    for (std::size_t i{0}; i < Animal::animalName.size(); i++) {
-        if (i != value) {
-            displayAnimal(getAnimal(i));
+    for (std::size_t i{0}; i < Animal::maxAnimals; i++) {
+        if (static_cast<Animal::Type>(i) != x) {
+            displayAnimal(getAnimal(static_cast<Animal::Type>(i)));
         }
     }
 }
