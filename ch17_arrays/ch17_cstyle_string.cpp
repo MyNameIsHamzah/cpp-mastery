@@ -30,5 +30,9 @@ int main() {
     printCStyleBackwards("");
     printCStyleBackwardsWhile("Hello World! I'm fruity");
 
+    const char* const color{"Orange"};
+    std::cout << color;
+    std::cout << static_cast<const void*>(color)
+              << "\n";  // we have to cast to const void in order to get the memory address of color
     return 0;
 }
