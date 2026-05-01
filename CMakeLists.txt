@@ -14,7 +14,9 @@ include_directories(ch17_arrays)
 # ---------------------------------------------------------
 add_executable(ch16_q3-4  ch16_vectors/quiz_q3-4_minmax.cpp)
 add_executable(ch16_q5  ch16_vectors/quiz_q5_hangman.cpp)
+
 add_executable(ch17_6_quiz ch17_arrays/ch17_6_quiz.cpp)
 add_executable(ch17_cstyle_arrs ch17_arrays/ch17_cstyle_arrs.cpp)
 add_executable(ch17_string ch17_arrays/ch17_cstyle_string.cpp)
 add_executable(ch17_multidimensions ch17_arrays/ch17_multidimensions.cpp)
+add_executable(quiz_q2 ch17_arrays/quiz_q2.cpp)
