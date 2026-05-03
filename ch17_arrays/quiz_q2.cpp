@@ -40,7 +40,7 @@ class Player {
         char choice{};
         while (true) {
             std::cin >> choice;
-            if (std::cin.fail() || ((choice < '0' || choice > '4') && choice != 'q') ||
+            if (std::cin.fail() || ((choice < '0' || choice > '3') && choice != 'q') ||
                 std::cin.peek() != '\n') {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -80,7 +80,7 @@ class Player {
     }
 
    public:
-    Player() : m_gold(generateInitialGold()) {};
+    Player() : m_gold(generateInitialGold()) {}
 
     void startGame() {
         welcomePlayer();

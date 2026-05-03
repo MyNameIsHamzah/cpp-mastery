@@ -5,8 +5,8 @@
 
 namespace Potion {
 enum Type { healing, mana, speed, invisibility, max_type };
-std::array<int, 4> prices{20, 30, 12, 50};
-std::array<std::string_view, 4> names{"healing", "mana", "speed", "invisibility"};
+constexpr std::array<int, 4> prices{20, 30, 12, 50};
+constexpr std::array<std::string_view, 4> names{"healing", "mana", "speed", "invisibility"};
 
 void shop() {
     std::cout << "Here is our selection for today:\n";
