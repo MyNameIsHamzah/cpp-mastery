@@ -13,6 +13,6 @@ class Deck {
 
    public:
     Deck();
-    Card& dealCard();
+    Card dealCard();
     void shuffle();
 };

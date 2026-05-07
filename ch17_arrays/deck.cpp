@@ -14,7 +14,7 @@ Deck::Deck() {  // could use a lambda here to avoid copies
     }
 }
 
-Card& Deck::dealCard() {
+Card Deck::dealCard() {
     assert(currentIndex != std::size(m_deck));
     Card& currentCard{m_deck[currentIndex]};
     currentIndex++;

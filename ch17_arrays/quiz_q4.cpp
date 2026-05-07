@@ -8,8 +8,8 @@ struct Player {
     int score{0};
 };
 
-Card& dealCard(Player& player, Deck& deck) {
-    auto& randomCard{deck.dealCard()};
+Card dealCard(Player& player, Deck& deck) {
+    auto randomCard{deck.dealCard()};
     player.score += randomCard.rankValue[randomCard.rank];
     return randomCard;
 }
@@ -25,14 +25,11 @@ void displayScores(Player& dealer, Player& player) {
     std::cout << "You have score: " << player.score << "\n";
 }
 
-bool hasGoneBust(Player& player) {
-    if (player.score > settings::blackjack) {
-        return true;
-    }
-    return false;
+bool hasGoneBust(const Player& player) {
+    return player.score > settings::blackjack;
 }
 
-bool hasPlayerWon(Player& dealer, Player& player) {
+bool hasPlayerWon(const Player& dealer, const Player& player) {
     if ((player.score > dealer.score && player.score <= settings::blackjack) ||
         hasGoneBust(dealer)) {
         return true;
@@ -41,13 +38,13 @@ bool hasPlayerWon(Player& dealer, Player& player) {
 }
 
 void handleDealersTurn(Player& dealer, Deck& deck) {
-    auto& card{dealCard(dealer, deck)};
+    auto card{dealCard(dealer, deck)};
     std::cout << "The dealer flips a " << card << ". They now have: " << dealer.score << "\n";
 }
 
 void handlePlayerTurn(Player& player, Deck& deck, char input) {
     if (input == 'h') {
-        auto& card{dealCard(player, deck)};
+        auto card{dealCard(player, deck)};
         std::cout << "You were dealt " << card << ". You now have: " << player.score << "\n";
     }
 }
@@ -87,9 +84,7 @@ void playBlackjack(Player& dealer, Player& player, Deck& deck) {
             break;
         }
         handlePlayerTurn(player, deck, input);
-        if (player.score == settings::blackjack) {
-            return;
-        }
+
         if (hasGoneBust(player)) {
             std::cout << "You went bust!\n";
             return;
