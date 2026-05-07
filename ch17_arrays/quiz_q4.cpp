@@ -10,9 +10,7 @@ struct Player {
 
 Card& dealCard(Player& player, Deck& deck) {
     auto& randomCard{deck.dealCard()};
-    player.score +=
-        randomCard.rankValue[randomCard.rank];  // need to find a clean way to handle the rank
-                                                // values. Ace is 11, Face cards as 10.
+    player.score += randomCard.rankValue[randomCard.rank];
     return randomCard;
 }
 
@@ -27,13 +25,6 @@ void displayScores(Player& dealer, Player& player) {
     std::cout << "You have score: " << player.score << "\n";
 }
 
-bool hasPlayerWon(Player& dealer, Player& player) {
-    if (player.score > dealer.score) {
-        return true;
-    }
-    return false;
-}
-
 bool hasGoneBust(Player& player) {
     if (player.score > settings::blackjack) {
         return true;
@@ -41,20 +32,24 @@ bool hasGoneBust(Player& player) {
     return false;
 }
 
-void handleDealersTurn(Player& dealer, Deck& deck) {
-    do {
-        auto& card{dealCard(dealer, deck)};
-        std::cout << "The dealer flips a " << card << ". They now have: " << dealer.score << "\n";
-    } while ((dealer.score < settings::dealerLimit) &&
-             !hasGoneBust(dealer));  // handle dealer going bust!
-    if (hasGoneBust(dealer)) {
-        std::cout << "The dealer went bust!\n";
+bool hasPlayerWon(Player& dealer, Player& player) {
+    if ((player.score > dealer.score && player.score <= settings::blackjack) ||
+        hasGoneBust(dealer)) {
+        return true;
     }
+    return false;
+}
+
+void handleDealersTurn(Player& dealer, Deck& deck) {
+    auto& card{dealCard(dealer, deck)};
+    std::cout << "The dealer flips a " << card << ". They now have: " << dealer.score << "\n";
 }
 
 void handlePlayerTurn(Player& player, Deck& deck, char input) {
-    auto& card{dealCard(player, deck)};
-    std::cout << "You were dealt " << card << ". You now have: " << player.score << "\n";
+    if (input == 'h') {
+        auto& card{dealCard(player, deck)};
+        std::cout << "You were dealt " << card << ". You now have: " << player.score << "\n";
+    }
 }
 
 char handlePlayerInput() {
@@ -62,7 +57,7 @@ char handlePlayerInput() {
     while (true) {
         std::cout << "(h) to hit, or (s) to stand: ";
         std::cin >> input;
-        if (std::cin.fail() || std::cin.peek() != '\n' || (input != 'h' || input != 's')) {
+        if ((input != 'h' && input != 's') || std::cin.peek() != '\n') {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             continue;
@@ -73,9 +68,16 @@ char handlePlayerInput() {
     return input;
 }
 
+void handleWinner(Player& dealer, Player& player) {
+    if (hasPlayerWon(dealer, player)) {
+        std::cout << "You win!\n";
+    } else {
+        std::cout << "You lose!\n";
+    }
+}
+
 void playBlackjack(Player& dealer, Player& player, Deck& deck) {
     deck.shuffle();
-
     dealInitialCards(dealer, player, deck);
     displayScores(dealer, player);
 
@@ -85,18 +87,24 @@ void playBlackjack(Player& dealer, Player& player, Deck& deck) {
             break;
         }
         handlePlayerTurn(player, deck, input);
+        if (player.score == settings::blackjack) {
+            return;
+        }
         if (hasGoneBust(player)) {
             std::cout << "You went bust!\n";
-            break;
+            return;
         }
     }
 
-    handleDealersTurn(dealer, deck);
-
-    if (hasPlayerWon(dealer, player)) {
-        std::cout << "You win!\n";
-    } else {
-        std::cout << "You lose!\n";
+    while (true) {
+        handleDealersTurn(dealer, deck);
+        if (dealer.score >= settings::dealerLimit) {
+            if (hasGoneBust(dealer)) {
+                std::cout << "The dealer went bust!\n";
+                return;
+            }
+            break;
+        }
     }
 }
 
@@ -105,6 +113,5 @@ int main() {
     Player player;
     Deck deck;
     playBlackjack(dealer, player, deck);
+    handleWinner(dealer, player);
 }
-
-// this logic is all fucked up. need to think about this properly.
