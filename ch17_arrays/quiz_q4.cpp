@@ -6,23 +6,30 @@
 
 struct Player {
     int score{0};
+    int numOfHighAces{0};
 };
 
 Card dealCard(Player& player, Deck& deck) {
     auto randomCard{deck.dealCard()};
     player.score += randomCard.rankValue[randomCard.rank];
-    if (randomCard.rank == Card::rank_ace && player.score > settings::blackjack) {
+    if (randomCard.rank == Card::rank_ace) {
+        player.numOfHighAces += 1;
+    }
+    if (player.score > settings::blackjack && player.numOfHighAces > 0) {
         player.score -= 10;
+        player.numOfHighAces--;
     }
     return randomCard;
 }
 
 void dealAndDisplayInitialCards(Player& dealer, Player& player, Deck& deck) {
-    std::cout << "The dealer is showing " << dealCard(dealer, deck) << " (" << dealer.score
-              << ")\n";
+    Card d1{dealCard(dealer, deck)};
+    Card c1{dealCard(player, deck)};
+    Card c2{dealCard(player, deck)};
 
-    std::cout << "You are showing " << dealCard(player, deck) << " " << dealCard(player, deck)
-              << " (" << player.score << ")\n";
+    std::cout << "The dealer is showing " << d1 << " (" << dealer.score << ")\n";
+
+    std::cout << "You are showing " << c1 << " " << c2 << " (" << player.score << ")\n";
 }
 
 bool hasGoneBust(const Player& player) {
@@ -31,7 +38,7 @@ bool hasGoneBust(const Player& player) {
 
 bool hasPlayerWon(const Player& dealer, const Player& player) {
     if ((player.score > dealer.score && player.score <= settings::blackjack) ||
-        hasGoneBust(dealer)) {
+        (hasGoneBust(dealer) && !hasGoneBust(player))) {
         return true;
     }
     return false;
@@ -42,11 +49,9 @@ void handleDealersTurn(Player& dealer, Deck& deck) {
     std::cout << "The dealer flips a " << card << ". They now have: " << dealer.score << "\n";
 }
 
-void handlePlayerTurn(Player& player, Deck& deck, char input) {
-    if (input == 'h') {
-        auto card{dealCard(player, deck)};
-        std::cout << "You were dealt " << card << ". You now have: " << player.score << "\n";
-    }
+void handlePlayerTurn(Player& player, Deck& deck) {
+    auto card{dealCard(player, deck)};
+    std::cout << "You were dealt " << card << ". You now have: " << player.score << "\n";
 }
 
 char handlePlayerInput() {
@@ -86,7 +91,7 @@ void playBlackjack(Player& dealer, Player& player, Deck& deck) {
         if (input == 's') {
             break;
         }
-        handlePlayerTurn(player, deck, input);
+        handlePlayerTurn(player, deck);
 
         if (hasGoneBust(player)) {
             std::cout << "You went bust!\n";
