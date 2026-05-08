@@ -11,18 +11,18 @@ struct Player {
 Card dealCard(Player& player, Deck& deck) {
     auto randomCard{deck.dealCard()};
     player.score += randomCard.rankValue[randomCard.rank];
+    if (randomCard.rank == Card::rank_ace && player.score > settings::blackjack) {
+        player.score -= 10;
+    }
     return randomCard;
 }
 
-void dealInitialCards(Player& dealer, Player& player, Deck& deck) {
-    dealCard(dealer, deck);
-    dealCard(player, deck);
-    dealCard(player, deck);
-}
+void dealAndDisplayInitialCards(Player& dealer, Player& player, Deck& deck) {
+    std::cout << "The dealer is showing " << dealCard(dealer, deck) << " (" << dealer.score
+              << ")\n";
 
-void displayScores(Player& dealer, Player& player) {
-    std::cout << "The dealer is showing: " << dealer.score << "\n";
-    std::cout << "You have score: " << player.score << "\n";
+    std::cout << "You are showing " << dealCard(player, deck) << " " << dealCard(player, deck)
+              << " (" << player.score << ")\n";
 }
 
 bool hasGoneBust(const Player& player) {
@@ -69,14 +69,17 @@ void handleWinner(Player& dealer, Player& player) {
     if (hasPlayerWon(dealer, player)) {
         std::cout << "You win!\n";
     } else {
-        std::cout << "You lose!\n";
+        if (player.score == dealer.score) {
+            std::cout << "It's a draw!\n";
+        } else {
+            std::cout << "You lose!\n";
+        }
     }
 }
 
 void playBlackjack(Player& dealer, Player& player, Deck& deck) {
     deck.shuffle();
-    dealInitialCards(dealer, player, deck);
-    displayScores(dealer, player);
+    dealAndDisplayInitialCards(dealer, player, deck);
 
     while (true) {
         char input{handlePlayerInput()};
