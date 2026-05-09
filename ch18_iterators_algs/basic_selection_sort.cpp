@@ -39,9 +39,29 @@ void selectionSortDescending(std::array<T, N>& arr) {
     }
 }
 
+template <typename T, std::size_t N>
+void bubbleSort(std::array<T, N>& arr) {
+    auto iteration{0};
+    while (true) {
+        bool swapHappened{false};
+        for (std::size_t i{0}; i < N - 1; ++i) {
+            if (arr[i + 1] < arr[i]) {
+                std::swap(arr[i + 1], arr[i]);
+                swapHappened = true;
+            }
+        }
+        iteration++;
+        if (!swapHappened) {
+            break;
+        }
+    }
+    std::cout << "Early termination on iteration " << iteration << "\n";
+}
+
 int main() {
-    std::array<std::size_t, 6> arr{30, 60, 20, 50, 40, 10};
+    std::array<std::size_t, 9> arr{6, 3, 2, 9, 7, 1, 5, 4, 8};
     printArray(arr);
-    selectionSortDescending(arr);
+    bubbleSort(arr);
+    printArray(arr);
     return 0;
 }
