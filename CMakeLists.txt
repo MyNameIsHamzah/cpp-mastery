@@ -25,3 +25,6 @@ add_executable(quiz_q2 ch17_arrays/quiz_q2.cpp)
 add_executable(quiz_q3 ch17_arrays/quiz_q3.cpp ch17_arrays/deck.cpp)
 add_executable(quiz_q4 ch17_arrays/quiz_q4.cpp ch17_arrays/deck.cpp)
 add_executable(ch18_1 ch18_iterators_algs/basic_selection_sort.cpp)
+add_executable(ch18_3 ch18_iterators_algs/stl_algs.cpp)
+add_executable(ch18_4 ch18_iterators_algs/timer_test.cpp)
+
