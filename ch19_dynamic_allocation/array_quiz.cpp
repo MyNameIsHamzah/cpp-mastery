@@ -22,8 +22,13 @@ std::size_t numOfNames() {
 }
 
 std::string* createArray(const std::size_t numOfNames) {
-    std::string* array{new std::string[numOfNames]};
-    return array;
+    try {
+        std::string* array{new std::string[numOfNames]};
+        return array;
+    } catch (const std::bad_alloc& e) {
+        std::cerr << "allocation  failed: " << e.what() << "\n";
+        return nullptr;
+    }
 }
 
 void enterNames(std::string* arr, std::size_t length) {
@@ -46,6 +51,10 @@ void sortNames(std::string* arr, std::size_t length) {
 void quiz() {
     const auto length{numOfNames()};
     std::string* names{createArray(length)};
+    if (names == nullptr) {
+        std::cout << "buy more RAM :(\n";
+        return;
+    }
 
     enterNames(names, length);
     sortNames(names, length);
