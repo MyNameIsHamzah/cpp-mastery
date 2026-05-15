@@ -32,9 +32,16 @@ add_executable(ch19_2 ch19_dynamic_allocation/array_quiz.cpp)
 add_executable(ch19_3 ch19_dynamic_allocation/destructor.cpp)
 add_executable(ch19_4 ch19_dynamic_allocation/pointer_to_pointer.cpp)
 add_executable(ch19_5 ch19_dynamic_allocation/void_pointers.cpp)
+<<<<<<< HEAD
 add_executable(ch20_6 ch20_functions/lambdas.cpp)
 add_executable(ch20_7 ch20_functions/lambda_containers.cpp)
 add_executable(ch20.7_q2 ch20_functions/square_numbers.cpp)
+=======
+add_executable(ch20_1 ch20_functions/lambdas.cpp)
+add_executable(ch20_2 ch20_functions/lambda_captures.cpp)
+
+
+>>>>>>> 8d66f19 (continue with 20.7 q2)
 
 
 

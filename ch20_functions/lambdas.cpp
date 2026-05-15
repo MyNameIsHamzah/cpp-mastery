@@ -3,7 +3,6 @@
 #include <iostream>
 
 template <typename T>
-
 bool isGreaterThanTwo(T n) {
     return n > 2;
 }
@@ -36,7 +35,6 @@ void findIfUsingLambda(std::array<T, N>& arr) {
 
 struct Student {
     std::string_view name;
-
     int points;
 };
 
@@ -68,13 +66,11 @@ void question1() {
 
 struct Season {
     std::string_view name{};
-
     double averageTemperature{};
 };
 
 void question2() {
     std::array<Season, 4> seasons{
-
         {{"Spring", 285.0}, {"Summer", 296.0}, {"Fall", 288.0}, {"Winter", 263.0}}};
 
     std::sort(seasons.begin(), seasons.end(), [](const Season& a, const Season& b) {
