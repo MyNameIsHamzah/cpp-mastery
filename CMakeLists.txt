@@ -41,3 +41,6 @@ add_executable(ch22_3 ch22_move_semantics/stringbox.cpp)
 add_executable(ch22_5 ch22_move_semantics/unique_pointer.cpp)
 add_executable(ch22_ms ch22_move_semantics/ms_quiz.cpp)
 add_executable(ch22_6 ch22_move_semantics/shared_pointer.cpp)
+add_executable(ch22_7 ch22_move_semantics/circular_deps.cpp)
+add_executable(ch22_quiz ch22_move_semantics/quiz.cpp)
+
