@@ -1,6 +1,8 @@
 #include <cstring>
 #include <iostream>
 #include <utility>
+#include <vector>
+
 class stringBox {
    private:
     char* m_box;
